@@ -8,9 +8,9 @@ class Array(VMobject):
         data:List[NodeValue],
         empty_value:str=NodeConfig.EMPTY_VALUE,
         total_width:float|Node=None,
-        font_size=NodeConfig.FONT_SIZE,
         box_type=NodeConfig.BOX_TYPE,
         box_color=NodeConfig.BOX_COLOR,
+        text_scale:float = 1.0,
         **kwargs
     ):
         """
@@ -34,6 +34,9 @@ class Array(VMobject):
             box_color (_type_, optional): 
                 数组box的类型. 
                 Defaults to NodeConfig.BOX_COLOR.
+            text_scale (float, optional): 
+                文本的缩放比例. 
+                Defaults to 1.0.
         """
         super().__init__(**kwargs)
         if total_width is None:
@@ -41,7 +44,7 @@ class Array(VMobject):
    
         item_width = total_width / len(data)
         self.array = [
-            Node(item, empty_value=empty_value, width=item_width, font_size=font_size, box_type=box_type, box_color=box_color)
+            Node(item, empty_value=empty_value, width=item_width, text_scale=text_scale, box_type=box_type, box_color=box_color)
             for item in data
         ]
 

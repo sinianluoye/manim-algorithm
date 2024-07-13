@@ -164,7 +164,7 @@ class Node(VMobject):
 
     class Unselect(Succession):
 
-        def __init__(self, nodes: List["Node"], **kwargs):
+        def __init__(self, *nodes: List["Node"], **kwargs):
             """
             取消选择节点, 用于取消突出显示
             具体的操作为设置节点的填充颜色为透明
