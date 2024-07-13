@@ -51,7 +51,7 @@ jobs:
     environment:
       name: test
       # OPTIONAL: uncomment and update to include your PyPI project URL in the deployment status:
-      url: https://test.pypi.org/project/manim-algorithm
+      url: https://test.pypi.org/p/manim-algorithm
 
     steps:
       - name: Retrieve release distributions
