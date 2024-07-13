@@ -1,4 +1,4 @@
-from node import *
+from .node import *
 from typing import List, Iterable
 
 class Array(VMobject):
