@@ -27,6 +27,8 @@ jobs:
           python-version: "3.11"
 
       - name: Build release distributions
+        env:
+          MANIM_ALGORITHM_COMMIT_HASH: ${{ github.sha }}
         run: |
           pip install setuptools wheel
           python setup.py sdist bdist_wheel
