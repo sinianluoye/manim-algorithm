@@ -58,6 +58,8 @@ class Array(VMobject):
   
 
     def __getitem__(self, idx):
+        """获取下标为idx的Node
+        """
         return self.array[idx]
 
     def __len__(self):

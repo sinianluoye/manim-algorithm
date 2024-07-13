@@ -1,0 +1,1 @@
+twine upload dist/* --config-file %~dp0.pypirc --verbose
