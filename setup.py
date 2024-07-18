@@ -1,7 +1,9 @@
 from setuptools import setup, find_packages
 
 import os
-commit_hash = os.environ.get("MANIM_ALGORITHM_COMMIT_HASH").strip()
+commit_hash = os.environ.get("MANIM_ALGORITHM_COMMIT_HASH")
+if commit_hash:
+    commit_hash = commit_hash.strip()
 version = "0.0.2"
 if commit_hash:
     version = f"{version}.dev{int(commit_hash[:7],base=16)}"
