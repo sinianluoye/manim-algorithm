@@ -12,13 +12,14 @@ class ArrayScene(Scene):
     def construct(self):
         data = [-1, 0, 3, -43.12, ' ', 'abc']
         array1 = Array(data, total_width=10)
-        array2 = Array(data, total_width=10, empty_value='/', box_type=Circle, box_color=RED, text_scale=1.5).next_to(array1, DOWN)
+        array2 = Array(data, total_width=10, box_type=Circle, box_color=RED, text_scale=1.5).next_to(array1, DOWN)
         self.play(FadeIn(array1, array2))
         self.wait(1)
         self.play(Node.Select(array1[2]))
         self.wait(1)
         self.play(Node.Unselect(array1[2]))
         self.play(Node.UpdateValue(array1[1], 123))
+        self.play(Node.UpdateValue(array1[4], "x"))
         node = Node(array1[1].value).next_to(array1, RIGHT)
         self.play(FadeIn(node))
         self.wait(2)

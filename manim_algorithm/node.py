@@ -8,7 +8,6 @@ NodeBoxType: TypeAlias = type[Square] | type[Circle]
 
 
 class NodeConfig:
-    EMPTY_VALUE = "-"
     WIDTH = 2
     BOX_TYPE = Square
     BOX_COLOR = WHITE
@@ -42,7 +41,6 @@ class Node(VMobject):
     def __init__(
         self,
         value: NodeValue = None,
-        empty_value: str = NodeConfig.EMPTY_VALUE,
         width: float = NodeConfig.WIDTH,
         text_scale:float = 1.0,
         box_type: NodeBoxType = NodeConfig.BOX_TYPE,
@@ -53,13 +51,8 @@ class Node(VMobject):
         创建一个Node对象, 用于表示一个节点
         Args:
             value (str | int | float | None, optional):
-                节点内的值，如果是字符串，展示的时候会以Tex展示.
-                如果是None或者空字符串，会展示empty_value.(这是由于manim的限制，直接展示*纯空白字符串*会导致坐标始终锁定在原点)
+                节点内的值，如果是字符串，展示的时候会以Tex展示. 如果是空串等，会展示为一个半径为0的点作为占位符
                 Defaults to None.
-
-            empty_value (str, optional):
-                如果value是None或者空字符串，会展示empty_value.(这是由于manim的限制，直接展示*纯空白字符串*会导致坐标始终锁定在原点) .
-                Defaults to '-'.
 
             width (int, optional): Node的宽度. Defaults to 2.
 
@@ -76,7 +69,6 @@ class Node(VMobject):
         super().__init__(**kwargs)
 
         self.value = value
-        self.empty_value = empty_value
 
         if box_type not in [Square, Circle]:
             raise ValueError("box_type must be Square or Circle")
@@ -91,9 +83,9 @@ class Node(VMobject):
         # 注意，box应该在text下边，所以先加box再加text
         self.add(self.box, self.text)
 
-    def generate_text_by_value(self, value: NodeValue) -> Tex:
+    def generate_text_by_value(self, value: NodeValue) -> Dot|Tex:
         if value is None or not str(value).strip():
-            value = self.empty_value
+            return Dot(radius=0)
         return Tex(str(value)).scale(self.text_scale)
 
     def get_slot(self, direction: Vector3D, index) -> Point3D:

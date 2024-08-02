@@ -10,7 +10,7 @@ from manim_algorithm.node import Node
 class NodeScene(Scene):
 
     def construct(self):
-        node_list = [Node(1, text_scale=2), Node(1.2, width=3), Node("abc", box_color=RED), Node(empty_value='/', box_type=Circle), Node(" ")]
+        node_list = [Node(1, text_scale=2), Node(1.2, width=3), Node("abc", box_color=RED), Node(, box_type=Circle), Node(" ")]
         nodes_group = VGroup(*node_list).arrange()
         self.play(FadeIn(nodes_group))
         self.wait(1)

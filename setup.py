@@ -4,14 +4,14 @@ import os
 commit_hash = os.environ.get("MANIM_ALGORITHM_COMMIT_HASH")
 if commit_hash:
     commit_hash = commit_hash.strip()
-version = "0.0.2"
+version = "0.0.3"
 if commit_hash:
     version = f"{version}.dev{int(commit_hash[:7],base=16)}"
 
 setup(
     name='manim-algorithm',
     version=version,
-    packages=find_packages(),
+    packages=find_packages(exclude=["test", "test.*"]),
     install_requires=[
         "manim>=0.18.0"
     ],

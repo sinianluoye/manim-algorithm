@@ -6,7 +6,6 @@ class Array(VMobject):
     def __init__(
         self,
         data:List[NodeValue],
-        empty_value:str=NodeConfig.EMPTY_VALUE,
         total_width:float|Node=None,
         box_type=NodeConfig.BOX_TYPE,
         box_color=NodeConfig.BOX_COLOR,
@@ -19,9 +18,6 @@ class Array(VMobject):
         Args:
             data (List[NodeValue]): 
                数组的内容，注意这里的数组长度是固定的，不支持额外申请空间
-
-            empty_value (str, optional): 
-               如果value是None或者空字符串，会展示empty_value.(这是由于manim的限制，直接展示*纯空白字符串*会导致坐标始终锁定在原点) .
 
             total_width (float, optional):
                 数组的总宽度.
@@ -44,7 +40,7 @@ class Array(VMobject):
    
         item_width = total_width / len(data)
         self.array = [
-            Node(item, empty_value=empty_value, width=item_width, text_scale=text_scale, box_type=box_type, box_color=box_color)
+            Node(item, width=item_width, text_scale=text_scale, box_type=box_type, box_color=box_color)
             for item in data
         ]
 
