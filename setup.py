@@ -4,7 +4,7 @@ import os
 commit_hash = os.environ.get("MANIM_ALGORITHM_COMMIT_HASH")
 if commit_hash:
     commit_hash = commit_hash.strip()
-version = "0.0.3"
+version = "0.0.4"
 if commit_hash:
     version = f"{version}.dev{int(commit_hash[:7],base=16)}"
 
