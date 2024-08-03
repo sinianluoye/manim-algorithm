@@ -11,7 +11,7 @@ if commit_hash:
 setup(
     name='manim-algorithm',
     version=version,
-    packages=find_packages(exclude=["test", "test.*"]),
+    packages=find_packages(exclude=["test", "test.*", "examples", "examples.*"]),
     install_requires=[
         "manim>=0.18.0"
     ],

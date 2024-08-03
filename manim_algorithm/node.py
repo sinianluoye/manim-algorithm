@@ -1,6 +1,7 @@
 from typing import Self, Literal, TypeAlias
 from manim import *
-from manim.typing import Point3D, Vector3D
+from manim.typing import ManimFloat, Point3D, Vector3D
+from manim.utils.color import ManimColor
 from .utils.numpy_helper import NumpyHelper
 
 NodeValue: TypeAlias = str | int | float | None
@@ -67,26 +68,68 @@ class Node(VMobject):
         """
 
         super().__init__(**kwargs)
+        self.set_box(box_type, width, box_color)
+        self.text_scale = text_scale
+        self.set_value(value)
+        self.width = width
+    
+    def set_box(self, box_type: NodeBoxType, width: float, color: ManimColor) -> Self:
+        """
+        设置节点的形状和颜色
 
-        self.value = value
+        Args:
+            box_type (type): Node的形状，Square或Circle
+            width (float): Node的宽度
+            color (ManimColor): Node的颜色
 
+        Returns:
+            Node: 返回自身
+        """
+        if hasattr(self, 'box'):
+            self.remove(self.box)
         if box_type not in [Square, Circle]:
             raise ValueError("box_type must be Square or Circle")
         if box_type == Square:
             self.box = Square(width)
         elif box_type == Circle:
             self.box = Circle(width / 2)
-        self.box.set_color(box_color)
-        self.text_scale = text_scale
-        self.text = self.generate_text_by_value(self.value)
-        self.width = width
-        # 注意，box应该在text下边，所以先加box再加text
-        self.add(self.box, self.text)
+        self.box.set_color(color)
+        self.add(self.box)
+        return self
 
-    def generate_text_by_value(self, value: NodeValue) -> Dot|Tex:
+    def get_box(self) -> Mobject:
+        return self.box
+
+    def set_value(self, value: NodeValue) -> Self:
+        if hasattr(self, 'text'):
+            self.remove(self.text)
+        self.value = value
         if value is None or not str(value).strip():
-            return Dot(radius=0)
-        return Tex(str(value)).scale(self.text_scale)
+            self.text = Dot(radius=0)
+        else:
+            self.text = Tex(str(value)).scale(self.text_scale)
+        self.text.move_to(self)
+        self.add(self.text)
+        return self
+
+    def get_value(self) -> NodeValue:
+        return self.value
+
+    def set_fill(self,
+        color: ParsableManimColor | None = None,
+        opacity: float | None = None,
+        family: bool = True,
+    ) -> Self:
+        super().set_fill(color, opacity, False)
+        if hasattr(self, 'box'):
+            self.box.set_fill(color, opacity, family)
+        return self
+
+    def get_fill_color(self) -> ManimColor:
+        return self.box.get_fill_color()
+
+    def get_fill_opacity(self) -> ManimFloat:
+        return self.box.get_fill_opacity()
 
     def get_slot(self, direction: Vector3D, index) -> Point3D:
         """
@@ -152,7 +195,8 @@ class Node(VMobject):
                 color (ManimColor, optional): 填充的颜色. Defaults to RED.
                 opacity (float, optional): 填充颜色的透明度. Defaults to 0.5.
             """
-            super().__init__(AnimationGroup(*[node.box.animate.set_fill(color, opacity) for node in nodes]), **kwargs)
+            
+            super().__init__(AnimationGroup(*[node.animate.set_fill(color, opacity) for node in nodes]), **kwargs)
 
     class Unselect(Succession):
 
@@ -161,7 +205,7 @@ class Node(VMobject):
             取消选择节点, 用于取消突出显示
             具体的操作为设置节点的填充颜色为透明
             """
-            super().__init__(AnimationGroup(*[node.box.animate.set_fill(opacity=0) for node in nodes]), **kwargs)
+            super().__init__(AnimationGroup(*[node.animate.set_fill(node.get_fill_color(), 0) for node in nodes]), **kwargs)
 
     class UpdateValue(Succession):
 
@@ -172,9 +216,8 @@ class Node(VMobject):
             Args:
                 value (NodeValue): 新的值
             """
-            text = node.generate_text_by_value(value).move_to(node.text)
-            node.value = value
-            super().__init__(*[node.text.animate.become(text)], **kwargs)
+            super().__init__(*[node.animate.set_value(value)], **kwargs)
+        
         
     class MoveAndOverWrite(Succession):
 
@@ -190,7 +233,8 @@ class Node(VMobject):
             """
             steps = []
             if select_color is not None:
-                steps.append(Node.Select(node, select_color, select_opacity))
+                steps.append(Node.Select(node, color=select_color, opacity=select_opacity))
+          
             steps.extend([
                 node.animate.move_to(target),
                 AnimationGroup(
