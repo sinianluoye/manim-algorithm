@@ -1,4 +1,4 @@
-from typing import Self, Literal, TypeAlias
+from typing import Literal, TypeAlias
 from manim import *
 from manim.typing import ManimFloat, Point3D, Vector3D
 from manim.utils.color import ManimColor
@@ -73,7 +73,7 @@ class Node(VMobject):
         self.set_value(value)
         self.width = width
     
-    def set_box(self, box_type: NodeBoxType, width: float, color: ManimColor) -> Self:
+    def set_box(self, box_type: NodeBoxType, width: float, color: ManimColor) -> 'Node':
         """
         设置节点的形状和颜色
 
@@ -100,7 +100,7 @@ class Node(VMobject):
     def get_box(self) -> Mobject:
         return self.box
 
-    def set_value(self, value: NodeValue) -> Self:
+    def set_value(self, value: NodeValue) -> 'Node':
         if hasattr(self, 'text'):
             self.remove(self.text)
         self.value = value
@@ -119,7 +119,7 @@ class Node(VMobject):
         color: ParsableManimColor | None = None,
         opacity: float | None = None,
         family: bool = True,
-    ) -> Self:
+    ) -> 'Node':
         super().set_fill(color, opacity, False)
         if hasattr(self, 'box'):
             self.box.set_fill(color, opacity, family)

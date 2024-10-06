@@ -37,6 +37,7 @@ class TestArray:
 
     def teardown_method(self):
         shutil.rmtree(self.TEST_MEDIA_DIR)
+        
     """
     class Array(VMobject):
 
