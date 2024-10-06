@@ -166,5 +166,6 @@ cython_debug/
 media/
 .pypirc
 local_test/
+manim-algorithm-env/
 
 .vscode/

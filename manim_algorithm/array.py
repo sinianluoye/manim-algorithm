@@ -1,7 +1,7 @@
 from .node import *
-from typing import List, Iterable
+from typing import List, Iterable, Union
 
-class Array(VGroup):
+class Array(VMobject):
 
     def __init__(
         self,
@@ -43,7 +43,7 @@ class Array(VGroup):
             Node(item, width=item_width, text_scale=text_scale, box_type=box_type, box_color=box_color)
             for item in data
         ]
-        self.add(self.array)
+        self.add(*self.array)
         self.arrange(buff=0)
 
     @property
@@ -54,7 +54,7 @@ class Array(VGroup):
         return [item.value for item in self.array]
   
 
-    def __getitem__(self, key: Union[int, slice]) -> Node|'Array':
+    def __getitem__(self, key: Union[int, slice]) -> Node:
         """获取下标为key的Node 或者 获取切片为key的Arra
         """
         if isinstance(key, slice):
